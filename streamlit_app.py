@@ -1,7 +1,7 @@
-
 import streamlit as st
 import requests
 import base64
+import os
 
 st.title("🎥 Face Swap Cloud")
 
@@ -25,8 +25,9 @@ if st.button("Launch FaceSwap"):
             "target": ("temp_face.jpg", open("temp_face.jpg", "rb"), "image/jpeg")
         }
 
+        url = os.environ.get("BACKEND_URL")
+
         try:
-            url = "https://faceswap-cloud-backend-1.onrender.com/faceswap"
             response = requests.post(url, files=files)
             if response.status_code == 200:
                 result = response.json()
