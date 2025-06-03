@@ -4,8 +4,7 @@ import requests
 import base64
 import os
 
-st.set_page_config(page_title="🎥 Face Swap Cloud")
-
+st.set_page_config(page_title="Face Swap Cloud", page_icon="🎥")
 st.title("🎥 Face Swap Cloud")
 st.markdown("Upload a video and a face image to apply face swap.")
 
@@ -27,15 +26,17 @@ if st.button("Launch FaceSwap"):
             "target": ("temp_face.jpg", open("temp_face.jpg", "rb"), "image/jpeg")
         }
 
-        backend_url = os.getenv("BACKEND_URL", "https://faceswap-cloud-backend-1.onrender.com/faceswap")
-
-        try:
-            response = requests.post(backend_url, files=files)
-            if response.status_code == 200:
-                result = response.json()
-                video_bytes = base64.b64decode(result["result_base64"])
-                st.video(video_bytes)
-            else:
-                st.error(f"❌ Error: {response.status_code} - {response.text}")
-        except Exception as e:
-            st.error(f"⚠️ Connection failed: {e}")
+        backend_url = os.getenv("BACKEND_URL", "")
+        if not backend_url:
+            st.error("❌ BACKEND_URL is not set in secrets.")
+        else:
+            try:
+                response = requests.post(backend_url, files=files)
+                if response.status_code == 200:
+                    result = response.json()
+                    video_bytes = base64.b64decode(result["result_base64"])
+                    st.video(video_bytes)
+                else:
+                    st.error(f"❌ Error: {response.status_code} - {response.text}")
+            except Exception as e:
+                st.error(f"⚠️ Connection failed: {e}")
