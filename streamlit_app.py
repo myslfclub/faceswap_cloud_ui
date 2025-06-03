@@ -4,7 +4,6 @@ import base64
 import os
 
 st.title("🎥 Face Swap Cloud")
-
 st.markdown("Upload a video and a face image to apply face swap.")
 
 video_file = st.file_uploader("Upload Video File (mp4, mov)", type=["mp4", "mov"])
@@ -25,10 +24,10 @@ if st.button("Launch FaceSwap"):
             "target": ("temp_face.jpg", open("temp_face.jpg", "rb"), "image/jpeg")
         }
 
-        url = os.environ.get("BACKEND_URL")
+        backend_url = os.getenv("BACKEND_URL")
 
         try:
-            response = requests.post(url, files=files)
+            response = requests.post(backend_url, files=files)
             if response.status_code == 200:
                 result = response.json()
                 video_bytes = base64.b64decode(result["result_base64"])
