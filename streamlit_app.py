@@ -1,4 +1,3 @@
-
 import streamlit as st
 import requests
 import base64
@@ -26,7 +25,7 @@ if st.button("Launch FaceSwap"):
         }
 
         try:
-            url = "https://faceswap-cloud-backend-xxxxx.onrender.com/faceswap"  # replace with your actual backend URL
+            url = "https://faceswap-cloud-backend-1.onrender.com/faceswap"
             response = requests.post(url, files=files)
             if response.status_code == 200:
                 result = response.json()
