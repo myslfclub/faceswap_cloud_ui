@@ -21,12 +21,12 @@ if st.button("Launch FaceSwap"):
             f.write(face_file.read())
 
         files = {
-            "source": open("temp_video.mp4", "rb"),
-            "target": open("temp_face.jpg", "rb")
+            "source": ("temp_video.mp4", open("temp_video.mp4", "rb"), "video/mp4"),
+            "target": ("temp_face.jpg", open("temp_face.jpg", "rb"), "image/jpeg")
         }
 
         try:
-            url = "https://faceswap-cloud-backend.onrender.com"
+            url = "https://faceswap-cloud-backend-xxxxx.onrender.com/faceswap"  # replace with your actual backend URL
             response = requests.post(url, files=files)
             if response.status_code == 200:
                 result = response.json()
