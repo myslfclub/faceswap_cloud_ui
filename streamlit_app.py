@@ -16,9 +16,9 @@ target_file = st.file_uploader("Target (visage à recevoir)", type=["jpg", "jpeg
 if st.button("Lancer le FaceSwap") and source_file and target_file:
     with st.spinner("Traitement en cours..."):
         files = {
-            "source": (source_file.name, source_file, "image/jpeg"),
-            "target": (target_file.name, target_file, "image/jpeg"),
-        }
+    "source": open(video_path, "rb"),   # le fichier vidéo
+    "target": open(face_path, "rb")     # l’image du visage
+}
         try:
             # Remplace cette URL par celle de ton backend Render
             url = "https://faceswap_cloud_backend.onrender.com/faceswap"
