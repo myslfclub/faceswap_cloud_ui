@@ -1,31 +1,38 @@
 
 import streamlit as st
 import requests
-from PIL import Image
-import io
 import base64
 
-st.set_page_config(page_title="FaceSwap Cloud", layout="centered")
-st.title("🤖 FaceSwap Cloud UI")
+st.title("🎥 Face Swap Cloud")
 
-st.write("Téléversez deux images : visage source et visage cible")
+st.markdown("Upload a video and a face image to apply face swap.")
 
-source_file = st.file_uploader("Source (visage à copier)", type=["jpg", "jpeg", "png"])
-target_file = st.file_uploader("Target (visage à recevoir)", type=["jpg", "jpeg", "png"])
+video_file = st.file_uploader("Upload Video File (mp4, mov)", type=["mp4", "mov"])
+face_file = st.file_uploader("Upload Face Image (jpg, png)", type=["jpg", "jpeg", "png"])
+resolution = st.selectbox("Output Resolution", ["720", "1080"], index=0)
 
-if st.button("Lancer le FaceSwap") and source_file and target_file:
-    with st.spinner("Traitement en cours..."):
+if st.button("Launch FaceSwap"):
+    if not video_file or not face_file:
+        st.error("Please upload both a video and a face image.")
+    else:
+        with open("temp_video.mp4", "wb") as f:
+            f.write(video_file.read())
+        with open("temp_face.jpg", "wb") as f:
+            f.write(face_file.read())
+
         files = {
-    "source": open(video_path, "rb"),   # le fichier vidéo
-    "target": open(face_path, "rb")     # l’image du visage
-}
+            "source": open("temp_video.mp4", "rb"),
+            "target": open("temp_face.jpg", "rb")
+        }
+
         try:
-            # Remplace cette URL par celle de ton backend Render
-            url = "https://faceswap_cloud_backend.onrender.com/faceswap"
+            url = "https://faceswap-cloud-backend-xxxxx.onrender.com/faceswap"
             response = requests.post(url, files=files)
-            response.raise_for_status()
-            result = response.json()["result_base64"]
-            image_bytes = base64.b64decode(result)
-            st.image(Image.open(io.BytesIO(image_bytes)), caption="Résultat FaceSwap", use_column_width=True)
+            if response.status_code == 200:
+                result = response.json()
+                video_bytes = base64.b64decode(result["result_base64"])
+                st.video(video_bytes)
+            else:
+                st.error(f"❌ Error: {response.status_code} - {response.text}")
         except Exception as e:
-            st.error(f"Erreur : {e}")
+            st.error(f"⚠️ Connection failed: {e}")
