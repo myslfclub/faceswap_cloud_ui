@@ -26,7 +26,7 @@ if st.button("Launch FaceSwap"):
         }
 
         try:
-            url = "https://faceswap-cloud-backend.onrender.com"  # Replace with real Render URL
+            url = "url = "https://faceswap-cloud-backend.onrender.com/faceswap"  # Replace with real Render URL
             response = requests.post(url, files=files)
             if response.status_code == 200:
                 result = response.json()
