@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-BACKEND_URL = "https://faceswap-cloud-backend.onrender.com/faceswap"
+BACKEND_URL = "https://myslf.club/faceswap"
 
 st.title("FaceSwap UI")
 
